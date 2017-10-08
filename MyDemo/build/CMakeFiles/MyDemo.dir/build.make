@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo
+CMAKE_SOURCE_DIR = /home/sar/git_repository/mesh/MyDemo
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build
+CMAKE_BINARY_DIR = /home/sar/git_repository/mesh/MyDemo/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/MyDemo.dir/depend.make
@@ -57,42 +57,42 @@ include CMakeFiles/MyDemo.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/MyDemo.dir/flags.make
 
-CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o: CMakeFiles/MyDemo.dir/flags.make
-CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o: /home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o -c /home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp
+CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o: CMakeFiles/MyDemo.dir/flags.make
+CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o: /home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sar/git_repository/mesh/MyDemo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o -c /home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp
 
-CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp > CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.i
+CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp > CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.i
 
-CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp -o CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.s
+CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp -o CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.s
 
-CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o.requires:
+CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o.requires:
 
-.PHONY : CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o.requires
+.PHONY : CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o.requires
 
-CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o.provides: CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o.requires
-	$(MAKE) -f CMakeFiles/MyDemo.dir/build.make CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o.provides.build
-.PHONY : CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o.provides
+CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o.provides: CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o.requires
+	$(MAKE) -f CMakeFiles/MyDemo.dir/build.make CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o.provides.build
+.PHONY : CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o.provides
 
-CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o.provides.build: CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o
+CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o.provides.build: CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o
 
 
 CMakeFiles/MyDemo.dir/main.cpp.o: CMakeFiles/MyDemo.dir/flags.make
 CMakeFiles/MyDemo.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/MyDemo.dir/main.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MyDemo.dir/main.cpp.o -c /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sar/git_repository/mesh/MyDemo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/MyDemo.dir/main.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MyDemo.dir/main.cpp.o -c /home/sar/git_repository/mesh/MyDemo/main.cpp
 
 CMakeFiles/MyDemo.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MyDemo.dir/main.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/main.cpp > CMakeFiles/MyDemo.dir/main.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sar/git_repository/mesh/MyDemo/main.cpp > CMakeFiles/MyDemo.dir/main.cpp.i
 
 CMakeFiles/MyDemo.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MyDemo.dir/main.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/main.cpp -o CMakeFiles/MyDemo.dir/main.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sar/git_repository/mesh/MyDemo/main.cpp -o CMakeFiles/MyDemo.dir/main.cpp.s
 
 CMakeFiles/MyDemo.dir/main.cpp.o.requires:
 
@@ -107,13 +107,13 @@ CMakeFiles/MyDemo.dir/main.cpp.o.provides.build: CMakeFiles/MyDemo.dir/main.cpp.
 
 # Object files for target MyDemo
 MyDemo_OBJECTS = \
-"CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o" \
+"CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o" \
 "CMakeFiles/MyDemo.dir/main.cpp.o"
 
 # External object files for target MyDemo
 MyDemo_EXTERNAL_OBJECTS =
 
-MyDemo: CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o
+MyDemo: CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o
 MyDemo: CMakeFiles/MyDemo.dir/main.cpp.o
 MyDemo: CMakeFiles/MyDemo.dir/build.make
 MyDemo: /usr/lib/x86_64-linux-gnu/libGLU.so
@@ -121,9 +121,52 @@ MyDemo: /usr/lib/x86_64-linux-gnu/libGL.so
 MyDemo: /usr/lib/x86_64-linux-gnu/libglut.so
 MyDemo: /usr/lib/x86_64-linux-gnu/libGLU.so
 MyDemo: /usr/lib/x86_64-linux-gnu/libGL.so
+MyDemo: /home/sar/anaconda2/lib/libopencv_stitching.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_superres.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_videostab.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_aruco.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_bgsegm.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_bioinspired.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_ccalib.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_dpm.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_freetype.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_fuzzy.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_hdf.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_line_descriptor.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_optflow.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_reg.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_saliency.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_stereo.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_structured_light.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_surface_matching.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_tracking.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_xfeatures2d.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_ximgproc.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_xobjdetect.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_xphoto.so.3.2.0
 MyDemo: /usr/lib/x86_64-linux-gnu/libglut.so
+MyDemo: /home/sar/anaconda2/lib/libopencv_shape.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_phase_unwrapping.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_rgbd.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_calib3d.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_video.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_datasets.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_dnn.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_face.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_plot.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_text.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_features2d.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_flann.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_objdetect.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_ml.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_highgui.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_photo.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_videoio.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_imgcodecs.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_imgproc.so.3.2.0
+MyDemo: /home/sar/anaconda2/lib/libopencv_core.so.3.2.0
 MyDemo: CMakeFiles/MyDemo.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable MyDemo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/sar/git_repository/mesh/MyDemo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable MyDemo"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MyDemo.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -131,7 +174,7 @@ CMakeFiles/MyDemo.dir/build: MyDemo
 
 .PHONY : CMakeFiles/MyDemo.dir/build
 
-CMakeFiles/MyDemo.dir/requires: CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o.requires
+CMakeFiles/MyDemo.dir/requires: CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o.requires
 CMakeFiles/MyDemo.dir/requires: CMakeFiles/MyDemo.dir/main.cpp.o.requires
 
 .PHONY : CMakeFiles/MyDemo.dir/requires
@@ -141,6 +184,6 @@ CMakeFiles/MyDemo.dir/clean:
 .PHONY : CMakeFiles/MyDemo.dir/clean
 
 CMakeFiles/MyDemo.dir/depend:
-	cd /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles/MyDemo.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/sar/git_repository/mesh/MyDemo/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sar/git_repository/mesh/MyDemo /home/sar/git_repository/mesh/MyDemo /home/sar/git_repository/mesh/MyDemo/build /home/sar/git_repository/mesh/MyDemo/build /home/sar/git_repository/mesh/MyDemo/build/CMakeFiles/MyDemo.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/MyDemo.dir/depend
 

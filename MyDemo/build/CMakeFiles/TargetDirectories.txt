@@ -1,3 +1,3 @@
-/home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles/edit_cache.dir
-/home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles/MyDemo.dir
-/home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles/rebuild_cache.dir
+/home/sar/git_repository/mesh/MyDemo/build/CMakeFiles/edit_cache.dir
+/home/sar/git_repository/mesh/MyDemo/build/CMakeFiles/MyDemo.dir
+/home/sar/git_repository/mesh/MyDemo/build/CMakeFiles/rebuild_cache.dir

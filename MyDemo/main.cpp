@@ -246,6 +246,30 @@ void draw_sharp_edges()
     glLineWidth(1.0);
 }
 
+void drawConvexHull() {
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glBegin(GL_LINE_LOOP);
+    convexHull::myEdge* edge = convexHull::lboundary[0], *t = edge->he_next();
+    glVertex3d((edge->vertex()->point())[0], (edge->vertex()->point())[1], (edge->vertex()->point())[2]);
+    while (t->vertex() != edge->source()) {
+        glVertex3d((t->vertex()->point())[0], (t->vertex()->point())[1], (t->vertex()->point())[2]);
+        t = t->he_next();
+    }
+    glVertex3d((t->vertex()->point())[0], (t->vertex()->point())[1], (t->vertex()->point())[2]);
+    glEnd();
+}
+
+void drawMeshPoints() {
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glPointSize(2.0f);
+    glBegin(GL_POINTS);
+    for(CMyMesh::MeshVertexIterator viter(&mesh); !viter.end(); ++viter) {
+        CPoint p = (*viter)->point();
+        glVertex3d(p[0], p[1], p[2]);
+    }
+    glEnd();
+}
+
 /*! display call back function
 */
 void display()
@@ -268,6 +292,11 @@ void display()
         draw_uv();
     /* draw the axis */
     //draw_axis();
+
+    if (convexHull::lboundary.size() > 0) {
+        drawConvexHull();
+        drawMeshPoints();
+    }
 
     glPopMatrix();
     glutSwapBuffers();
@@ -580,15 +609,34 @@ int main(int argc, char * argv[])
         mesh.read_off(mesh_name.c_str());
     }
 
+    
+    mesh.output_mesh_info();
+    mesh.test_iterator();
+
+    srand(time(NULL));
+
+    for (int i = 0; i < 1000; ++i) {
+        double x = ((double)(rand() % 1000000) / 1000000.0),
+               y = ((double)(rand() % 1000000) / 1000000.0);
+        CPoint p(x, y, 0.0);
+        delaunayTriangulation::insertVertex(mesh, p);
+    }
+
+    convexHull::makeConvexHull(mesh);
+
+
     normalize_mesh(&mesh);
     compute_normal(&mesh);
+
+    //----------------------TEST GAUSS-BONNET--------------------------
+    std::cout << "The result of the test of Gauss-Bonnet-Theorom is: " << gauss_bonnet::checkG_B(&mesh) << std::endl;
+    //-----------------------------------------------------------------
+
+
 
     mesh.output_mesh_info();
     mesh.test_iterator();
 
-//----------------------TEST GAUSS-BONNET--------------------------
-    std::cout << "The result of the test of Gauss-Bonnet-Theorom is: " << gauss_bonnet::checkG_B(&mesh) << std::endl;
-//-----------------------------------------------------------------
 
     init_openGL(argc, argv);
     return 0;

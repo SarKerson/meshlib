@@ -4,13 +4,15 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp" "/home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o"
-  "/home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/main.cpp" "/home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles/MyDemo.dir/main.cpp.o"
+  "/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp" "/home/sar/git_repository/mesh/MyDemo/build/CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o"
+  "/home/sar/git_repository/mesh/MyDemo/main.cpp" "/home/sar/git_repository/mesh/MyDemo/build/CMakeFiles/MyDemo.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/home/sar/anaconda2/include"
+  "/home/sar/anaconda2/include/opencv"
   )
 
 # Targets to which this target links.

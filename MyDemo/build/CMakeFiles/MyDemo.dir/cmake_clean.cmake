@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o"
+  "CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o"
   "CMakeFiles/MyDemo.dir/main.cpp.o"
   "MyDemo.pdb"
   "MyDemo"

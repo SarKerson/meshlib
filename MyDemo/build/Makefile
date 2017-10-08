@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo
+CMAKE_SOURCE_DIR = /home/sar/git_repository/mesh/MyDemo
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build
+CMAKE_BINARY_DIR = /home/sar/git_repository/mesh/MyDemo/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sar/git_repository/mesh/MyDemo/build/CMakeFiles /home/sar/git_repository/mesh/MyDemo/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sar/Desktop/My_test/computer_vision/assignment_1/MyDemo/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sar/git_repository/mesh/MyDemo/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -123,32 +123,32 @@ MyDemo/fast:
 	$(MAKE) -f CMakeFiles/MyDemo.dir/build.make CMakeFiles/MyDemo.dir/build
 .PHONY : MyDemo/fast
 
-home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.o: home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o
+home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.o: home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o
 
-.PHONY : home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.o
+.PHONY : home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.o
 
 # target to build an object file
-home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o:
-	$(MAKE) -f CMakeFiles/MyDemo.dir/build.make CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o
-.PHONY : home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.o
+home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o:
+	$(MAKE) -f CMakeFiles/MyDemo.dir/build.make CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o
+.PHONY : home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.o
 
-home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.i: home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.i
+home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.i: home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.i
 
-.PHONY : home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.i
+.PHONY : home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.i
 
 # target to preprocess a source file
-home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.i:
-	$(MAKE) -f CMakeFiles/MyDemo.dir/build.make CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.i
-.PHONY : home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.i
+home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.i:
+	$(MAKE) -f CMakeFiles/MyDemo.dir/build.make CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.i
+.PHONY : home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.i
 
-home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.s: home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.s
+home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.s: home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.s
 
-.PHONY : home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.s
+.PHONY : home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.s
 
 # target to generate assembly for a file
-home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.s:
-	$(MAKE) -f CMakeFiles/MyDemo.dir/build.make CMakeFiles/MyDemo.dir/home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.s
-.PHONY : home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.cpp.s
+home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.s:
+	$(MAKE) -f CMakeFiles/MyDemo.dir/build.make CMakeFiles/MyDemo.dir/home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.s
+.PHONY : home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.cpp.s
 
 main.o: main.cpp.o
 
@@ -186,9 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... MyDemo"
 	@echo "... rebuild_cache"
-	@echo "... home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.o"
-	@echo "... home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.i"
-	@echo "... home/sar/Desktop/My_test/computer_vision/assignment_1/MeshLib/core/bmp/RgbImage.s"
+	@echo "... home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.o"
+	@echo "... home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.i"
+	@echo "... home/sar/git_repository/mesh/MeshLib/core/bmp/RgbImage.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

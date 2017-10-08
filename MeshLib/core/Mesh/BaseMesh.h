@@ -403,6 +403,9 @@ public:
 	List of the vertices of the mesh.
 	*/
 	typename std::list<tVertex> & vertices()	{ return m_verts; };
+
+public:
+	std::map<int, tFace> & map_face()			{ return m_map_face; }
 /*
 	bool with_uv() { return m_with_texture; };
 	bool with_normal() { return m_with_normal; };
