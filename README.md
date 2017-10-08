@@ -1,11 +1,11 @@
-# meshlib
+# MESHLIB
 a halfedge-based mesh library for 3d-mesh 
 
 You can find the core library in the **/MeshLib**, and demo in the **/MyDemo**; some mesh data for testing is in the **/Data**.
 **/MyDemo/main.cpp** shows how to use this library.
 in **/MyDemo/MyMesh.h**, there are some namespaces that implement some algrithoms.
 
-# SOME TRIPS FOR USING
+# SOME TIPS FOR USING
 ## WHAT SHOULD BE DONE WHILE BUILDING A MESH
 ### 1. label boundary for edges, halfedges, vertex
 	//Label boundary edges
