@@ -552,74 +552,6 @@ void init_openGL(int argc, char * argv[])
 }
 
 
-namespace homeWork {
-    inline double mod(CPoint v) {
-        return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-    }
-
-
-    /*
-    My codes to test THE GAUSS-BONNET THEOROM:
-    */
-    double checkG_B(CMyMesh *pMesh)
-    {
-        double GB = 0;
-        for (CMyMesh::MeshVertexIterator viter(pMesh); !viter.end(); ++viter)
-        {
-            CMyVertex *v = *viter;
-            if(v->boundary()) {     //pi
-                std::vector<CPoint> vEdge;
-                double totalAngle = 0;
-                for(CMyMesh::VertexVertexIterator vviter(v); !vviter.end(); ++vviter)
-                {
-                    CMyVertex *pV = *vviter;
-                    CPoint p = pV->point();
-                    CPoint e = p - v->point();   //e1
-                    vEdge.push_back(e);
-                }
-                for(size_t i = 1; i < vEdge.size(); ++i) {
-                    CPoint pa = vEdge.at(i - 1),
-                           pb = vEdge.at(i);
-                    double cos_ = pa * pb / mod(pa) / mod(pb);
-                    totalAngle += acos(cos_);
-                }
-                GB += (PI - totalAngle);
-            }
-            if(!v->boundary()) {     //2 * pi
-                std::vector<CPoint> vEdge;
-                double totalAngle = 0;
-                for(CMyMesh::VertexVertexIterator vviter(v); !vviter.end(); ++vviter)
-                {
-                    CMyVertex *pV = *vviter;
-                    CPoint p = pV->point();
-                    CPoint e = p - v->point();   //e1
-                    vEdge.push_back(e);
-                }
-                for(size_t i = 1; i < vEdge.size(); ++i) {
-                    CPoint pa = vEdge.at(i - 1),
-                           pb = vEdge.at(i);
-                    double cos_ = pa * pb / mod(pa) / mod(pb);
-                    totalAngle += acos(cos_);
-                }
-                //below is the important codes without witch the result will be wrong
-                //the angle between the fist vector and the last vector
-                CPoint p_first = vEdge.at(0), p_last = vEdge.at(vEdge.size() - 1);
-                double cos_ = p_first * p_last / mod(p_first) / mod(p_last);
-                totalAngle += acos(cos_);
-                GB += (2 * PI - totalAngle);
-            }
-            
-        }
-        return GB;
-    }
-
-    
-
-
-
-}
-
-
 
 /*! main function for viewer
 */
@@ -655,7 +587,7 @@ int main(int argc, char * argv[])
     mesh.test_iterator();
 
 //----------------------TEST GAUSS-BONNET--------------------------
-    std::cout << "The result of the test of Gauss-Bonnet-Theorom is: " << homeWork::checkG_B(&mesh) << std::endl;
+    std::cout << "The result of the test of Gauss-Bonnet-Theorom is: " << gauss_bonnet::checkG_B(&mesh) << std::endl;
 //-----------------------------------------------------------------
 
     init_openGL(argc, argv);
