@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 2.6)
+add_compile_options(-fpermissive -std=c++11)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/build/CMakeModules/")
+
+project(MyDemo)
+
+find_package(OpenGL REQUIRED)
+include_directories(${OpenGL_INCLUDE_DIR})
+
+find_package(FREEGLUT REQUIRED)
+include_directories(${FREEGLUT_INCLUDE_DIR})
+
+add_executable(${PROJECT_NAME} ${PROJECT_BINARY_DIR}/../../MeshLib/core/bmp/RgbImage.cpp main.cpp )
+
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARY} ${FREEGLUT_LIBRARY} ${OPENGL_LIBRARY})
+
