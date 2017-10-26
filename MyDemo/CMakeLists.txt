@@ -10,10 +10,14 @@ include_directories(${OpenGL_INCLUDE_DIR})
 find_package(FREEGLUT REQUIRED)
 include_directories(${FREEGLUT_INCLUDE_DIR})
 
-find_package( OpenCV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} )
+# find_package( OpenCV REQUIRED )
+# include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+find_package( PkgConfig )
+pkg_check_modules( EIGEN3 REQUIRED eigen3 )
+include_directories( ${EIGEN3_INCLUDE_DIRS} )
 
 add_executable(${PROJECT_NAME} ${PROJECT_BINARY_DIR}/../../MeshLib/core/bmp/RgbImage.cpp main.cpp )
 
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARY} ${FREEGLUT_LIBRARY} ${OPENGL_LIBRARY} ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARY} ${FREEGLUT_LIBRARY} ${OPENGL_LIBRARY} ${OpenCV_LIBS} ${Eigen_LIBS})
 
