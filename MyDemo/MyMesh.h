@@ -11,11 +11,13 @@
 #include "../MeshLib/core/Mesh/boundary.h"
 #include "../MeshLib/core/Mesh/iterators.h"
 #include "../MeshLib/core/Parser/parser.h"
-#include <opencv2/opencv.hpp>
+#include <eigen3/Eigen/Dense>
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238
 #endif
+
+#define MESH_DEBUG 0
 
 namespace MeshLib
 {
@@ -163,6 +165,7 @@ namespace MeshLib
 
 		void output_mesh_info();
 		void test_iterator();
+
 	};
 
 	typedef MyMesh<CMyVertex, CMyEdge, CMyFace, CMyHalfEdge> CMyMesh;
@@ -188,6 +191,7 @@ namespace MeshLib
 		int genus = (2 - (euler_char + nb)) / 2;
 		std::cout << "genus=" << genus << std::endl;
 	}
+
 
 	template<typename V, typename E, typename F, typename H>
 	void MyMesh<V, E, F, H>::test_iterator()
@@ -247,15 +251,18 @@ namespace MeshLib
 	}
 }
 
+inline double mod(MeshLib::CPoint v) {
+    return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+}
+
+inline double mod(Eigen::Vector3d v) {
+    return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+}
+
 
 namespace gauss_bonnet {
 
 	using namespace MeshLib;
-
-    inline double mod(CPoint v) {
-        return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-    }
-
 
     /*
     My codes to test THE GAUSS-BONNET THEOROM:
@@ -456,11 +463,10 @@ namespace convexHull {
 
     double orientation(CPoint pi, CPoint pj, /*CPoint *pk,*/ CPoint p)   //i->j->p
     {
-        double m[2][2] = { { pj[0] - pi[0], /*pk[0] - pi[0],*/ p[0] - pi[0] },
-                           { pj[1] - pi[1], /*pk[0] - pi[0],*/ p[1] - pi[1] } };
-                           /*{ pj[0] - pi[0], pk[0] - pi[0], p[0] - pi[0] }}*/
-        cv::Mat M = cv::Mat(2, 2, CV_64F, m);
-        return cv::determinant(M);
+        Eigen::Matrix2d m;
+        m << pj[0] - pi[0], p[0] - pi[0],
+             pj[1] - pi[1], p[1] - pi[1];
+        return m.determinant();
     }
 
     double orientation(myEdge* he, CVertex* v) 
@@ -569,22 +575,22 @@ namespace delaunayTriangulation
 
     double inCircle(CPoint pi, CPoint pj, CPoint pk, CPoint p)
     {
-        double m[4][4] = { { pi[0], pi[1], pi[0] * pi[0] + pi[1] * pi[1], 1 },
-                           { pj[0], pj[1], pj[0] * pj[0] + pj[1] * pj[1], 1 },
-                           { pk[0], pk[1], pk[0] * pk[0] + pk[1] * pk[1], 1 },
-                           {  p[0],  p[1],  p[0] *  p[0] +  p[1] *  p[1], 1 } };
-        cv::Mat M = cv::Mat(4, 4, CV_64F, m);
-        return cv::determinant(M);
+        Eigen::Matrix4d m;
+        m << pi[0], pi[1], pi[0] * pi[0] + pi[1] * pi[1], 1,
+             pj[0], pj[1], pj[0] * pj[0] + pj[1] * pj[1], 1,
+             pk[0], pk[1], pk[0] * pk[0] + pk[1] * pk[1], 1,
+             p[0],  p[1],  p[0] *  p[0] +  p[1] *  p[1], 1;
+        return m.determinant();
     }
 
 
     double triArea(CPoint p0, CPoint p1, CPoint p2)
     {
-        double m[3][3] = { { p0[0], p0[1], 1 },
-                           { p1[0], p1[1], 1 },
-                           { p2[0], p2[1], 1 } };
-        cv::Mat M = cv::Mat(3, 3, CV_64F, m);
-        return (cv::determinant(M) * 0.5);
+        Eigen::Matrix3d m;
+        m << p0[0], p0[1], 1,
+             p1[0], p1[1], 1,
+             p2[0], p2[1], 1;
+        return m.determinant() * 0.5;
     }
 
 
@@ -896,6 +902,237 @@ namespace delaunayTriangulation
     void legalizeFace(CFace * face) {
 
     }
+
+}
+
+namespace harmonicMap {
+
+    using namespace MeshLib;
+    double Energy = 0;
+    double e = 0.01;
+
+/**
+ * function of the boudary vertexs, [x0, y0, z0],[x1, y1, z1],...,[xn, yn, zn]
+ */
+    std::map<CMyVertex*, Eigen::Vector3d> g;    //all the boundary
+
+    std::map<CMyVertex*, Eigen::Vector3d> f;    //all the result 
+
+
+
+    float k(CMyVertex * v, CMyVertex * w, CMyMesh & mesh)
+    {
+        CEdge * edge =  mesh.vertexEdge(v, w);
+        Eigen::Vector3d v_v; v_v << (v->point())[0], (v->point())[1], (v->point())[2];
+        Eigen::Vector3d v_w; v_w << (w->point())[0], (w->point())[1], (w->point())[2];
+        assert(edge != NULL);
+        if (edge->boundary()) {
+            CHalfEdge * he = (edge->halfedge(0))->he_next();
+            assert(he != NULL);
+            CVertex * vk = he->vertex();
+            Eigen::Vector3d v_k; v_k << (vk->point())[0], (vk->point())[1], (vk->point())[2];
+            double cot_k = (v_v - v_k).dot(v_w - v_k) / (mod((v_v - v_k).cross(v_w - v_k)));
+#if MESH_DEBUG
+            std::cout << "cot: " << cot_k << "\n";
+#endif
+            return cot_k;
+        }
+        else {
+            CHalfEdge * he0 = (edge->halfedge(0))->he_next(),
+                      * he1 = (edge->halfedge(1))->he_next();
+            assert(he0 != NULL && he1 != NULL);
+            CVertex * vk = he0->vertex(),
+                    * vl = he1->vertex();
+            Eigen::Vector3d v_k; v_k << (vk->point())[0], (vk->point())[1], (vk->point())[2];
+            Eigen::Vector3d v_l; v_l << (vl->point())[0], (vl->point())[1], (vl->point())[2];
+            /* calculate the cot */
+#if MESH_DEBUG
+            std::cout << "vv - vk" << v_v - v_k << "\n"
+                      << "vw - vk" << v_w - v_k << "\n"
+                      << "vv - vk dot vw - vk: " << (v_v - v_k).dot(v_w - v_k) << "\n";
+#endif
+            double cot_k = (v_v - v_k).dot(v_w - v_k) / (mod((v_v - v_k).cross(v_w - v_k)));
+            double cot_l = (v_v - v_l).dot(v_w - v_l) / (mod((v_v - v_l).cross(v_w - v_l)));   
+#if MESH_DEBUG
+            std::cout << "cot_k: " << cot_k << "\n";
+            std::cout << "cot_l: " << cot_l << "\n";
+#endif
+            return cot_k + cot_l;
+        }
+    }
+
+    int num_of_boundary(CMyMesh & mesh)
+    {
+        int sum = 0;
+        for (CMyMesh::MeshVertexIterator viter(&mesh); !viter.end(); ++viter)
+        {
+            CMyVertex *v = *viter;
+            if (v->boundary()) {
+                ++sum;
+            }
+        }
+        return sum;
+    }
+
+    int num_of_inner(CMyMesh & mesh)
+    {
+        return mesh.vertices().size() - num_of_boundary(mesh);
+    }
+
+    double length_halfedge(CHalfEdge * he)
+    {
+        CPoint p1 = he->vertex()->point(),
+               p2 = he->source()->point();
+        return (p1[0] - p2[0]) * (p1[0] - p2[0]) +
+               (p1[1] - p2[1]) * (p1[1] - p2[1]) +
+               (p1[2] - p2[2]) * (p1[2] - p2[2]);
+    }
+
+    void initDisk(CMyMesh & mesh)
+    {
+        /*some check, wheher genus is 1 or not*/
+        int nv = mesh.numVertices();
+        int ne = mesh.numEdges();
+        int nf = mesh.numFaces();
+        int euler_char = nv - ne + nf;
+        CMyMesh::CBoundary boundary(&mesh);
+        std::vector<CMyMesh::CLoop*> & loops = boundary.loops();
+        int nb = loops.size();
+        int genus = (2 - (euler_char + nb)) / 2;
+        assert(genus == 0);
+        /*end check*/
+
+        std::list<CMyHalfEdge*> & boundary_list = loops[0]->halfedges();
+        std::vector<CMyVertex* > _vlist_;
+
+        std::vector<double> vlength;   //[0, l01, l12, l23, l34,....]
+        double total_length = 0;
+
+        int i = 0;
+        for (std::list<CMyHalfEdge*>::iterator it = boundary_list.begin(); it != boundary_list.end(); ++ it) {
+            CMyHalfEdge *he = *it;
+            _vlist_.push_back((CMyVertex*)he->vertex());
+            if (vlength.size() == 0) {
+                vlength.push_back(0.0);
+            }
+            else {
+                vlength.push_back(length_halfedge(he) + vlength[i - 1]);
+            }
+            ++i;
+            total_length += length_halfedge(he);
+        }
+
+        for(int i = 0; i < _vlist_.size(); ++i) {
+            double theta = vlength[i] / total_length * 2.0 * M_PI;
+            Eigen::Vector3d g_v;
+            g_v << cos(theta), sin(theta), 0.0; 
+            g.insert(std::pair<CMyVertex*, Eigen::Vector3d>(_vlist_[i], g_v));
+            f.insert(std::pair<CMyVertex*, Eigen::Vector3d>(_vlist_[i], g_v));
+            _vlist_[i]->point() = CPoint(g_v[0], g_v[1], g_v[2]);
+#if MESH_DEBUG
+            std::cout << g_v << "\n";
+#endif
+        }
+    }
+
+    void topologicalDisk(CMyMesh & mesh)
+    {
+        initDisk(mesh);
+        int num_boundary = num_of_boundary(mesh);
+        int num_inner = num_of_inner(mesh);
+#if MESH_DEBUG
+        std::cout << "num_boundary: " << num_boundary << "\n"
+                  << "num_inner: " << num_inner << "\n";
+#endif
+
+        assert(num_boundary == g.size());        //all the functions of boundary vertex
+
+        double E = 0;
+        if (num_inner != 0) {                     //inner vertex
+
+            std::map<CMyVertex*, int> index;
+
+            int i = 0;
+            for (CMyMesh::MeshVertexIterator viter(&mesh); !viter.end(); ++viter)
+            {
+                CMyVertex *v = *viter;
+                if (!v->boundary()) {            //all inner vertex
+                    index.insert(std::make_pair(v, i++));
+                }
+            }
+
+            for (std::map<CMyVertex*, int>::iterator it = index.begin(); it != index.end(); ++ it) {
+                CMyVertex* v = it->first;
+                Eigen::Vector3d value; value << 0.0, 0.0, 0.0;
+                f.insert(std::make_pair(v, value));
+            }                                    //init f, now for each vertex in the Mesh, f(v) = [0 , 0, 0]
+            
+
+            i = 0;
+            do {                                        
+
+                Energy = E;
+                E = 0;
+
+                Eigen::MatrixXd A = Eigen::MatrixXd::Zero(num_inner, num_inner);
+                Eigen::VectorXd bx(num_inner),
+                                by(num_inner);
+
+                assert(index.size() == num_inner);
+                for (std::map<CMyVertex*, int>::iterator it = index.begin(); it != index.end(); ++ it) {
+                    CMyVertex* v = it->first;
+                    for(CMyMesh::VertexVertexIterator vviter(v); !vviter.end(); ++vviter)
+                    {
+                        CMyVertex *w = *vviter;
+                        double k_v_w = k(v, w, mesh);
+                        if (!w->boundary()) { //both inner
+                            A(index[v], index[w]) = k_v_w;
+                            A(index[w], index[v]) = k_v_w;
+                            A(index[v], index[v]) -= k_v_w;
+                            A(index[w], index[w]) -= k_v_w;  
+                        }
+                        else {
+                            A(index[v], index[v]) -= k_v_w;
+                            bx(index[v]) -= k_v_w * g[w][0];
+                            by(index[v]) -= k_v_w * g[w][1];
+                        }
+                        E += k_v_w * (f[v] - f[w]).dot(f[v] - f[w]);
+                    }
+                }
+                std::cout << "E: " << E << "\n";
+                std::cout << "Energy: " << Energy << "\n";
+                std::cout << "diff: " << fabs(E - Energy) << "\n";
+                // Ax = bx, Ay = by
+                // get x, y
+                Eigen::VectorXd x = A.colPivHouseholderQr().solve(bx);
+                Eigen::VectorXd y = A.colPivHouseholderQr().solve(by);
+
+                for (std::map<CMyVertex*, int>::iterator it = index.begin(); it != index.end(); ++ it) {
+                    CMyVertex* v = it->first;
+                    int indx = it->second;
+                    Eigen::Vector3d value; value << x[indx], y[indx], 0.0;
+                    f[v] = value;
+                    v->point() = CPoint(value[0], value[1], value[2]);
+                }
+                ++i;
+            } while(fabs(Energy - E) < e || i < 10);
+
+        }// if
+
+        // for (std::map<CMyVertex*, Eigen::Vector3d>::iterator it = g.begin(); it != g.end(); ++ it) {
+        //     f[it->first] = it->second;
+        // }
+
+        for (std::map<CMyVertex*, Eigen::Vector3d>::iterator it = f.begin(); it != f.end(); ++ it) {
+            Eigen::Vector3d v = it->second;
+            it->first->point() = CPoint(v[0], v[1], v[2]);   //change all the vertex
+#if MESH_DEBUG
+            std::cout << "result: " << it->first->point() << "\n"; 
+#endif
+        }
+    }
+
+
 
 }
 
