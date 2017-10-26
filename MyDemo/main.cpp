@@ -8,7 +8,9 @@
 #include "MyMesh.h"
 
 using namespace MeshLib;
-#define PI 3.1415926
+#define DEBUG 0
+#define DELAUNAY 0
+#define HARMONICMAP 1
 
 /* window width and height */
 int win_width, win_height;
@@ -586,6 +588,7 @@ void init_openGL(int argc, char * argv[])
 */
 int main(int argc, char * argv[])
 {
+#if !DEBUG
     if (argc != 2 && argc != 3)
     {
         std::cout << "Usage: input.m [texture.bmp]" << std::endl;
@@ -612,7 +615,7 @@ int main(int argc, char * argv[])
     
     mesh.output_mesh_info();
     mesh.test_iterator();
-
+#if DELAUNAY
     srand(time(NULL));
 
     for (int i = 0; i < 1000; ++i) {
@@ -624,20 +627,73 @@ int main(int argc, char * argv[])
 
     convexHull::makeConvexHull(mesh);
 
-
     normalize_mesh(&mesh);
     compute_normal(&mesh);
-
     //----------------------TEST GAUSS-BONNET--------------------------
     std::cout << "The result of the test of Gauss-Bonnet-Theorom is: " << gauss_bonnet::checkG_B(&mesh) << std::endl;
     //-----------------------------------------------------------------
-
-
-
     mesh.output_mesh_info();
     mesh.test_iterator();
+#endif
 
+#if HARMONICMAP
+    harmonicMap::topologicalDisk(mesh);
+#endif
 
     init_openGL(argc, argv);
+#else 
+    Eigen::Matrix3f A, B;
+    Eigen::MatrixXf C(5, 3);
+    Eigen::Vector3f b;
+    A << 1, 2, 3,
+         4, 5, 6,
+         7, 8, 10;
+    B << 5, 5, 5,
+         6, 6, 6,
+         7, 7, 7;
+    C << 8, 8, 8,
+         9, 9, 9,
+         10, 10, 10,
+         11, 11, 11,
+         12, 12, 12;
+    b << 3, 3, 4;
+    // std::cout << "for A x = b: " << "\n"
+    //      << "A: \n" << A << "\n"
+    //      << "b: \n" << b << "\n";
+    // Eigen::Vector3f x = A.colPivHouseholderQr().solve(b);
+    // std::cout << "solution x: \n" << x << "\n";
+    // A.row(0).swap(A.row(1));
+    // std::cout << "A': \n" << A << "\n";
+    // std::cout << "B': \n" << B << "\n";
+    Eigen::Vector3d v1(3); v1 << 0.5, 0.5, -0.9;
+    Eigen::Vector3d v2(3); v2 << 1, 0, -0.75;
+
+    double dot = v1.dot(v2);
+    std::cout << "dot: " << dot << "\n";
+
+    Eigen::MatrixXd v = v1 * v2.transpose();
+    std::cout << v << "\n";
+    std::cout << "det: " << v.determinant() << "\n";
+
+    std::cout << mod(v1.cross(v2)) << "\n";
+
+    // std::map<CVertex*, Eigen::Vector3f> g;
+    // CVertex * v1 = new CVertex(),
+    //         * v2 = new CVertex(),
+    //         * v3 = new CVertex();
+    // v1->point() = CPoint(0,0,0);
+    // v2->point() = CPoint(0,0,1);
+    // v3->point() = CPoint(0,0,2);
+    // Eigen::Vector3f f1; f1 << 1,1,0;
+    // Eigen::Vector3f f2; f2 << 1,1,1;
+    // Eigen::Vector3f f3; f3 << 1,1,2;
+    // g.insert(std::make_pair(v1,f1));
+    // g.insert(std::make_pair(v2,f2));
+    // g.insert(std::make_pair(v3,f3));
+    // for (std::map<CVertex*, Eigen::Vector3f>::iterator it = g.begin(); it != g.end(); ++ it) {
+    //     std::cout << it->first->point() << "&" << it->second << "\n";
+    // }
+
+#endif
     return 0;
 }
