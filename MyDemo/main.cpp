@@ -5,7 +5,7 @@
 #include "../MeshLib/core/viewer/Arcball.h"                           /*  Arc Ball  Interface         */
 #include "../MeshLib/core/bmp/RgbImage.h"
 #include "../MeshLib/core/Geometry/quat.h"
-#include "MyMesh.h"
+#include "HarmonicMap_v1.h"
 
 using namespace MeshLib;
 #define DEBUG 0
@@ -18,7 +18,7 @@ int gButton;
 int startx, starty;
 int shadeFlag = 0;
 bool showMesh = true;
-bool showUV = false;
+bool showUV = true;
 
 /* rotation quaternion and translation vector for the object */
 CQrot       ObjRot(0, 0, 1, 0);
@@ -293,7 +293,7 @@ void display()
     if (showUV)
         draw_uv();
     /* draw the axis */
-    //draw_axis();
+    draw_axis();
 
     if (convexHull::lboundary.size() > 0) {
         drawConvexHull();
@@ -637,7 +637,8 @@ int main(int argc, char * argv[])
 #endif
 
 #if HARMONICMAP
-    harmonicMap::topologicalDisk(mesh);
+    // harmonicMap::topologicalDisk(mesh);
+    // harmonicMap::diskMap(mesh);
 #endif
 
     init_openGL(argc, argv);
@@ -693,6 +694,16 @@ int main(int argc, char * argv[])
     // for (std::map<CVertex*, Eigen::Vector3f>::iterator it = g.begin(); it != g.end(); ++ it) {
     //     std::cout << it->first->point() << "&" << it->second << "\n";
     // }
+    std::cout << "--------test----------------\n";
+    std::vector<Eigen::Triplet<double> > tris;
+    for (int i = 3; i > 0; --i) {
+        for (int j = 3; j > 0; --j) {
+            tris.push_back(Eigen::Triplet<double>(i-1, j-1, i+j));
+        }
+    }
+    Eigen::SparseMatrix<double> Ls(3, 3);
+    Ls.setFromTriplets(tris.begin(), tris.end());
+    std::cout << "ls:\n" << Ls << "\n";
 
 #endif
     return 0;
