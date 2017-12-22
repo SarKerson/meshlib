@@ -1,11 +1,18 @@
 #include "MyMesh.h"
 #include <eigen3/Eigen/Sparse>
 
-namespace harmonicMap {
+using namespace MeshLib;
 
-    using namespace MeshLib;
-    double Energy = 0;
-    double e = 0.2;
+
+#define DISK 0
+#define QUAD 1
+
+class harmornicMap
+{
+private:
+        
+    double Energy;
+    double e;
 
 /**
  * function of the boudary vertexs, [x0, y0, z0],[x1, y1, z1],...,[xn, yn, zn]
@@ -14,15 +21,17 @@ namespace harmonicMap {
 
     std::map<CMyVertex*, Eigen::Vector3d> f;    //all the result 
 
-    std::map<CMyVertex*, Eigen::Vector3d> org;
+    std::map<CMyVertex*, Eigen::Vector3d> org;  //origin
 
+public:
 
+    harmornicMap(double e = 0.01): e(e), Energy(0) {}
 
     double k(CMyVertex * v, CMyVertex * w, CMyMesh & mesh)
     {
         CEdge * edge =  mesh.vertexEdge(v, w);
-        Eigen::Vector3d v_v; v_v << (v->point())[0], (v->point())[1], (v->point())[2];
-        Eigen::Vector3d v_w; v_w << (w->point())[0], (w->point())[1], (w->point())[2];
+        Eigen::Vector3d v_v = org[v]; //v_v << (v->point())[0], (v->point())[1], (v->point())[2];
+        Eigen::Vector3d v_w = org[w]; //v_w << (w->point())[0], (w->point())[1], (w->point())[2];
         assert(edge != NULL);
         if (v->boundary() && w->boundary()) {
             CHalfEdge * he = (edge->halfedge(0))->he_next();
@@ -45,8 +54,8 @@ namespace harmonicMap {
             assert(he0 != NULL && he1 != NULL);
             CVertex * vk = he0->vertex(),
                     * vl = he1->vertex();
-            Eigen::Vector3d v_k; v_k << (vk->point())[0], (vk->point())[1], (vk->point())[2];
-            Eigen::Vector3d v_l; v_l << (vl->point())[0], (vl->point())[1], (vl->point())[2];
+            Eigen::Vector3d v_k = org[(CMyVertex*)vk]; //v_k << (vk->point())[0], (vk->point())[1], (vk->point())[2];
+            Eigen::Vector3d v_l = org[(CMyVertex*)vl]; //v_l << (vl->point())[0], (vl->point())[1], (vl->point())[2];
             /* calculate the cot */
 #if MESH_DEBUG
             std::cout << "vv - vk" << v_v - v_k << "\n"
@@ -114,7 +123,7 @@ namespace harmonicMap {
                (p1[2] - p2[2]) * (p1[2] - p2[2]);
     }
 
-/**
+    /**
  * [calculate the sum of hamonic energy of mesh]
  * @return [the sum of hamonic energy of mesh]
  */
@@ -136,7 +145,7 @@ namespace harmonicMap {
         return E;
     }
 
-    void initDisk(CMyMesh & mesh)
+    void set_boundary_disk(CMyMesh & mesh)
     {
         /*some check, wheher genus is 1 or not*/
         int nv = mesh.numVertices();
@@ -156,7 +165,7 @@ namespace harmonicMap {
         for (CMyMesh::MeshVertexIterator viter(&mesh); !viter.end(); ++viter) {
             CMyVertex * v = *viter;
             CPoint p = v->point();
-            f.insert(std::make_pair(v, Eigen::Vector3d(p[0], p[1], p[2])));
+            f.insert(std::make_pair(v, Eigen::Vector3d(0, 0, 0)));
             org.insert(std::make_pair(v, Eigen::Vector3d(p[0], p[1], p[2])));
         }
 
@@ -196,145 +205,9 @@ namespace harmonicMap {
         std::cout << "energy: " << harmonicEnergy(mesh) << "\n";
     }
 
-    void topologicalDisk(CMyMesh & mesh)
+    void set_boundary_quad(CMyMesh & mesh)
     {
-        initDisk(mesh);
-        int num_boundary = num_of_boundary(mesh);
-        int num_inner = num_of_inner(mesh);
-#if MESH_DEBUG
-        std::cout << "num_boundary: " << num_boundary << "\n"
-                  << "num_inner: " << num_inner << "\n";
-#endif
-
-        assert(num_boundary == g.size());        //all the functions of boundary vertex
-
-
-        double E = harmonicEnergy(mesh);
-
-        do {
-
-            Energy = E;
-            for (std::map<CMyVertex*, Eigen::Vector3d>::iterator it = f.begin(); it != f.end(); ++ it) {
-                CMyVertex * v = it->first;
-                Eigen::Vector3d p = it->second;
-                double sum_p_0 = 0, sum_p_1 = 0;
-                double sum_k = 0;
-                if (!v->boundary()) {
-                    for (CMyMesh::VertexVertexIterator vviter(v); !vviter.end(); ++vviter) {
-                        CMyVertex * w = *vviter;
-                        double k_v_w = k(v, w, mesh); 
-                        sum_p_0 += k_v_w * f[w][0];
-                        sum_p_1 += k_v_w * f[w][1];
-                        sum_k += k_v_w;
-                    }
-                    Eigen::Vector3d v_t(sum_p_0 / sum_k, sum_p_1 / sum_k, 0.0);
-                    f[v] = v_t;
-                    v->point() = CPoint(v_t[0], v_t[1], v_t[2]);
-                }
-            }
-            E = harmonicEnergy(mesh);
-
-            std::cout << "diff: " << fabs(Energy - E) << "\n"; 
-
-        } while (fabs(Energy - E) > 0.35);
-    } 
-
-    void __topologicalDisk(CMyMesh & mesh)
-    {
-
-    }
-
-    void _topologicalDisk(CMyMesh & mesh)
-    {
-        initDisk(mesh);
-        int num_boundary = num_of_boundary(mesh);
-        int num_inner = num_of_inner(mesh);
-#if MESH_DEBUG
-        std::cout << "num_boundary: " << num_boundary << "\n"
-                  << "num_inner: " << num_inner << "\n";
-#endif
-
-        assert(num_boundary == g.size());        //all the functions of boundary vertex
-
-        if (num_inner != 0) {                     //inner vertex
-
-            std::map<CMyVertex*, int> index;
-
-            int i = 0;
-            for (CMyMesh::MeshVertexIterator viter(&mesh); !viter.end(); ++viter)
-            {
-                CMyVertex *v = *viter;
-                if (!v->boundary()) {            //all inner vertex
-                    index.insert(std::make_pair(v, i++));
-                }
-            }
-
-            for (std::map<CMyVertex*, int>::iterator it = index.begin(); it != index.end(); ++ it) {
-                CMyVertex* v = it->first;
-                Eigen::Vector3d value; value << 0.0, 0.0, 0.0;
-                f.insert(std::make_pair(v, value));
-            }                                    //init f, now for each vertex in the Mesh, f(v) = [0 , 0, 0]
-
-            Eigen::SparseMatrix<double> A = Eigen::SparseMatrix::Zero(num_inner, num_inner);
-            Eigen::VectorXd bx = Eigen::VectorXd::Zero(num_inner),
-                            by = Eigen::VectorXd::Zero(num_inner);
-
-            assert(index.size() == num_inner);
-            for (std::map<CMyVertex*, int>::iterator it = index.begin(); it != index.end(); ++ it) {
-                CMyVertex* v = it->first;
-                for(CMyMesh::VertexVertexIterator vviter(v); !vviter.end(); ++vviter)
-                {
-                    CMyVertex *w = *vviter;
-                    double k_v_w = k(v, w, mesh);
-                    if (!w->boundary()) { //both inner
-                        A(index[v], index[w]) = k_v_w;
-                        A(index[w], index[v]) = k_v_w;
-                        A(index[v], index[v]) -= k_v_w;
-                        A(index[w], index[w]) -= k_v_w;  
-                    }
-                    else {
-                        A(index[v], index[v]) -= k_v_w;
-                        bx(index[v]) -= k_v_w * g[w][0];
-                        by(index[v]) -= k_v_w * g[w][1];
-                    }
-                }
-            }
-            // Ax = bx, Ay = by
-            // get x, y
-            Eigen::ConjugateGradient<Eigen::SparseMatrix<double> > solver;
-            solver.compute(A);
-            Eigen::VectorXd x = solver.solve(bx);
-            Eigen::VectorXd y = solver.solve(by);
-
-            for (std::map<CMyVertex*, int>::iterator it = index.begin(); it != index.end(); ++ it) {
-                CMyVertex* v = it->first;
-                int indx = it->second;
-                Eigen::Vector3d value; value << x[indx], y[indx], 0.0;
-                f[v] = value;
-                v->point() = CPoint(value[0], value[1], value[2]);
-            }
-
-
-        }// if
-
-        // for (std::map<CMyVertex*, Eigen::Vector3d>::iterator it = g.begin(); it != g.end(); ++ it) {
-        //     f[it->first] = it->second;
-        // }
-
-//         for (std::map<CMyVertex*, Eigen::Vector3d>::iterator it = f.begin(); it != f.end(); ++ it) {
-//             Eigen::Vector3d v = it->second;
-//             it->first->point() = CPoint(v[0], v[1], v[2]);   //change all the vertex
-// #if MESH_DEBUG
-//             std::cout << "result: " << it->first->point() << "\n"; 
-// #endif
-//         }
-    }
-
-
-    void initQuad(CMyMesh & mesh)
-    {
-
-        /*some check, wheher genus is 1 or not*/
+         /*some check, wheher genus is 1 or not*/
         int nv = mesh.numVertices();
         int ne = mesh.numEdges();
         int nf = mesh.numFaces();
@@ -363,7 +236,8 @@ namespace harmonicMap {
         for (CMyMesh::MeshVertexIterator viter(&mesh); !viter.end(); ++viter) {
             CMyVertex * v = *viter;
             CPoint p = v->point();
-            f.insert(std::make_pair(v, Eigen::Vector3d(p[0], p[1], p[2])));
+            f.insert(std::make_pair(v, Eigen::Vector3d(0, 0, 0)));
+            org.insert(std::make_pair(v, Eigen::Vector3d(p[0], p[1], p[2])));
         }
 
         int segmt = _vlist_.size() / 4;
@@ -385,13 +259,10 @@ namespace harmonicMap {
             _vlist_4.push_back(_vlist_[i]);
         }
 
-        // g->(v, value)           ----------------here
-
-
-
         for(int i = 0; i < _vlist_1.size(); ++i) {          //  (0, 0) ~ (1, 0)
             Eigen::Vector3d v((double)i / (double)_vlist_1.size(), 0.0, 0.0);
             g.insert(std::make_pair(_vlist_1[i], v));
+            f[_vlist_1[i]] = v;
             CPoint g_v(v[0], v[1], v[2]);
             _vlist_1[i]->point() = g_v;
 #if MESH_DEBUG
@@ -402,6 +273,7 @@ namespace harmonicMap {
         for(int i = 0; i < _vlist_2.size(); ++i) {          //  (0, 0) ~ (1, 0)
             Eigen::Vector3d v(1.0, (double)i / (double)_vlist_2.size(), 0.0);
             g.insert(std::make_pair(_vlist_2[i], v));
+            f[_vlist_2[i]] = v;
             CPoint g_v(v[0], v[1], v[2]);
             _vlist_2[i]->point() = g_v;
 #if MESH_DEBUG
@@ -412,6 +284,7 @@ namespace harmonicMap {
         for(int i = 0; i < _vlist_3.size(); ++i) {          //  (0, 0) ~ (1, 0)
             Eigen::Vector3d v((double)(_vlist_3.size() - i) / (double)_vlist_3.size(), 1.0, 0.0);
             g.insert(std::make_pair(_vlist_3[i], v));
+            f[_vlist_3[i]] = v;
             CPoint g_v(v[0], v[1], v[2]);
             _vlist_3[i]->point() = g_v;
 #if MESH_DEBUG
@@ -421,23 +294,69 @@ namespace harmonicMap {
         for(int i = 0; i < _vlist_4.size(); ++i) {          //  (0, 0) ~ (1, 0)
             Eigen::Vector3d v(0.0, (double)(_vlist_4.size() - i) / (double)_vlist_4.size(), 0.0);
             g.insert(std::make_pair(_vlist_4[i], v));
+            f[_vlist_4[i]] = v;
             CPoint g_v(v[0], v[1], v[2]);
             _vlist_4[i]->point() = g_v;
 #if MESH_DEBUG
             std::cout << g_v << "\n";
 #endif
         }
-
-        std::cout << "init Energy: " << harmonicEnergy(mesh) << std::endl;
-        out.close();
-
     }
 
-    void topologicalQuad(CMyMesh & mesh) 
+    void map(CMyMesh & mesh)                            /*--ALGORITHM:2--*/
     {
+        // set_boundary(mesh);
+        int num_boundary = num_of_boundary(mesh);
+        int num_inner = num_of_inner(mesh);
+#if MESH_DEBUG
+        std::cout << "num_boundary: " << num_boundary << "\n"
+                  << "num_inner: " << num_inner << "\n";
+#endif
 
+        assert(num_boundary == g.size());        //all the functions of boundary vertex
+
+
+        double E = harmonicEnergy(mesh);        //init E    /*--##FORMULA:3--*/
+
+        do {
+
+            Energy = E;                                     /*--##FORMULA:5--*/
+            for (std::map<CMyVertex*, Eigen::Vector3d>::iterator it = f.begin(); it != f.end(); ++ it) {
+                CMyVertex * v = it->first;
+                Eigen::Vector3d p = it->second;
+                double sum_p_0 = 0, sum_p_1 = 0;
+                double sum_k = 0;
+                if (!v->boundary()) {
+                    for (CMyMesh::VertexVertexIterator vviter(v); !vviter.end(); ++vviter) {
+                        CMyVertex * w = *vviter;
+                        double k_v_w = k(v, w, mesh); 
+                        sum_p_0 += k_v_w * f[w][0];  // x
+                        sum_p_1 += k_v_w * f[w][1];  // y
+                        sum_k += k_v_w;
+                    }
+                    Eigen::Vector3d v_t(sum_p_0 / sum_k, sum_p_1 / sum_k, 0.0); /*--##FORMULA:7--*/
+                    f[v] = v_t;
+                    v->point() = CPoint(v_t[0], v_t[1], v_t[2]);
+                }
+            }
+            E = harmonicEnergy(mesh);
+
+            std::cout << "diff: " << fabs(Energy - E) << "\n"; 
+
+        } while (fabs(Energy - E) > this->e);
+    } 
+
+};
+
+void generateHarmornicMap(int type, CMyMesh & mesh)
+{
+    harmornicMap m(0.1);
+    if (type == DISK) {
+        m.set_boundary_disk(mesh);
+        m.map(mesh);
     }
-
-
-
+    else if (type == QUAD) {
+        m.set_boundary_quad(mesh);
+        m.map(mesh);
+    }
 }
