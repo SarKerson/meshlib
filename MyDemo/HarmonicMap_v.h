@@ -197,7 +197,49 @@ public:
     /*! Iterative method compute harmonic map
      *  \param epsilon error threshould
      */ 
-    // void _iterative_map( double threshould = 5e-4 );
+    void _iterative_map( double threshould = 5e-4 )
+    {
+        //fix the boundary
+        _set_boundary();
+
+        //move interior each vertex to its center of neighbors
+        for( CMyMesh::MeshVertexIterator viter( m_pMesh ); !viter.end(); ++ viter )
+        {
+            CMyVertex * pV = *viter;
+            if( pV->boundary() ) continue;
+            
+            pV->huv() = CPoint(0,0,0);
+        }
+        
+        int i = 0;
+        while( true )
+        {
+            std::cout << "iteration: " << ++i << "\n";
+            double error = -1e+10;
+            //move interior each vertex to its center of neighbors
+            for( CMyMesh::MeshVertexIterator viter( m_pMesh ); !viter.end(); ++ viter )
+            {
+                CMyVertex * pV = *viter;
+                if( pV->boundary() ) continue;
+                
+                double  sw = 0;
+                CPoint suv(0,0,0);
+                for( CMyMesh::VertexVertexIterator vviter(pV); !vviter.end(); vviter ++ )
+                {
+                    CMyVertex * pW = *vviter;
+                    CMyEdge   * pE = m_pMesh->vertexEdge( pV, pW );
+                    double w = pE->weight();
+                    sw += w;
+                    suv = suv + pW->huv() * w;
+                }
+                suv /= sw;
+                double verror = (pV->huv()-suv).norm();
+                error = (verror > error )?verror:error; 
+                pV->huv() = suv;
+            }
+            if( error < threshould ) break;
+        }
+    }
 
 
 
@@ -206,5 +248,6 @@ public:
 void generateHarmornicMap(CMyMesh & mesh)
 {
     harmornicMap mapper(&mesh);
-    mapper._map();
+    // mapper._map();
+    mapper._iterative_map();
 }
