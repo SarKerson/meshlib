@@ -5,12 +5,13 @@
 #include "../MeshLib/core/viewer/Arcball.h"                           /*  Arc Ball  Interface         */
 #include "../MeshLib/core/bmp/RgbImage.h"
 #include "../MeshLib/core/Geometry/quat.h"
-#include "HarmonicMap_v1.h"
+#include "MeshOptimation_v.h"
 
 using namespace MeshLib;
 #define DEBUG 0
 #define DELAUNAY 0
 #define HARMONICMAP 1
+#define MESHOPTIMATION 0
 
 /* window width and height */
 int win_width, win_height;
@@ -26,6 +27,7 @@ CPoint      ObjTrans(0, 0, 0);
 
 /* global mesh */
 CMyMesh mesh;
+// CHMMesh mesh;
 
 /* arcball object */
 CArcball arcball;
@@ -172,6 +174,7 @@ void draw_mesh()
         {
             CMyVertex * v = *fviter;
             CPoint & pt = v->point();
+            // CPoint & huv = v->huv();
             CPoint2 & uv = v->uv();
             CPoint & rgb = v->rgb();
             CPoint n;
@@ -188,8 +191,37 @@ void draw_mesh()
             glTexCoord2d(uv[0], uv[1]);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             glVertex3d(pt[0], pt[1], pt[2]);
+            // glVertex3d(huv[0], huv[1], huv[2]);
         }
         glEnd();
+#if HARMONICMAP || MESHOPTIMATION
+        glBegin(GL_POLYGON);
+        for (CMyMesh::FaceVertexIterator fviter(pf); !fviter.end(); ++fviter)
+        {
+            CMyVertex * v = *fviter;
+            // CPoint & pt = v->point();
+            CPoint & huv = v->huv();
+            CPoint2 & uv = v->uv();
+            CPoint & rgb = v->rgb();
+            CPoint n;
+            switch (shadeFlag)
+            {
+            case 0:
+                n = pf->normal();
+                break;
+            case 1:
+                n = v->normal();
+                break;
+            }
+            glNormal3d(n[0], n[1], n[2]);
+            glTexCoord2d(uv[0], uv[1]);
+            glColor3f(rgb[0], rgb[1], rgb[2]);
+            // glVertex3d(pt[0], pt[1], pt[2]);
+            glVertex3d(huv[0] * 2, huv[1] * 2, huv[2] * 2);
+        }
+        glEnd();
+#endif
+
     }
 }
 
@@ -625,6 +657,8 @@ int main(int argc, char * argv[])
         delaunayTriangulation::insertVertex(mesh, p);
     }
 
+    mesh.write_m("delaunay.m");
+
     convexHull::makeConvexHull(mesh);
 
     normalize_mesh(&mesh);
@@ -637,9 +671,20 @@ int main(int argc, char * argv[])
 #endif
 
 #if HARMONICMAP
-    // harmonicMap::topologicalDisk(mesh);
-    // harmonicMap::diskMap(mesh);
+    generateHarmornicMap(mesh);
+    // for( CMyMesh::MeshVertexIterator viter( &mesh ); !viter.end(); ++ viter )
+    // {
+    //     CMyVertex * pV = *viter;
+    //     pV->point() = pV->huv();
+    // }
 #endif
+
+#if MESHOPTIMATION
+    generateHarmornicMap(mesh);
+    meshOptimation::legalizeMesh(mesh);
+#endif
+    mesh.output_mesh_info();
+    mesh.test_iterator();
 
     init_openGL(argc, argv);
 #else 
@@ -701,9 +746,24 @@ int main(int argc, char * argv[])
             tris.push_back(Eigen::Triplet<double>(i-1, j-1, i+j));
         }
     }
+    tris.push_back(Eigen::Triplet<double>(2, 2, 100));
+    tris.push_back(Eigen::Triplet<double>(1, 1, 1000));
+    tris.push_back(Eigen::Triplet<double>(1, 1, 10000));
     Eigen::SparseMatrix<double> Ls(3, 3);
     Ls.setFromTriplets(tris.begin(), tris.end());
     std::cout << "ls:\n" << Ls << "\n";
+    std::cout << "--------test----------------\n";
+    std::list<int> vecs;
+    for (int i = 0; i < 5; ++i) {
+        vecs.push_back(i);
+    }
+    for (int i = 0; i <vecs.size(); ++i) {
+        std::list<int>::iterator it = vecs.begin();
+        std::advance(it, i);
+        std::cout << *it << "\n";
+        vecs.push_back(*it + 1);
+        if (vecs.size() > 20) break;
+    }
 
 #endif
     return 0;

@@ -1,0 +1,11 @@
+-I../MeshLib/core/Geometry
+-I../MeshLib/core/Mesh
+-I../MeshLib/core/Operator
+-I../MeshLib/core/Parser
+-I../MeshLib/core/bmp
+-I../MeshLib/core/viewer
+-I./MyMesh.h
+-I./HarmonicMap.h
+-I/usr/include
+-I/usr/local/include
+

@@ -1,3 +1,4 @@
+#pragma once
 #include "MyMesh.h"
 #include <eigen3/Eigen/Sparse>
 
@@ -13,7 +14,7 @@ private:
         
     double Energy;
     double e;
-
+public:
 /**
  * function of the boudary vertexs, [x0, y0, z0],[x1, y1, z1],...,[xn, yn, zn]
  */
@@ -170,6 +171,7 @@ public:
         }
 
         std::list<CMyHalfEdge*> & boundary_list = loops[0]->halfedges();
+        std::cout << "loops: " << boundary_list.size() << "\n";
         std::vector<CMyVertex* > _vlist_;   //boundary vertexs
 
         std::vector<double> vlength;   //[0, l01, l12, l23, l34,....]
@@ -313,8 +315,8 @@ public:
                   << "num_inner: " << num_inner << "\n";
 #endif
 
-        assert(num_boundary == g.size());        //all the functions of boundary vertex
-
+        // assert(num_boundary == g.size());        //all the functions of boundary vertex
+        std::cout << "boundary: " << num_boundary << "\t" << "g_size: " << g.size() << "\t";
 
         double E = harmonicEnergy(mesh);        //init E    /*--##FORMULA:3--*/
 

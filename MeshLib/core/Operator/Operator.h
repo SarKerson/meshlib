@@ -16,11 +16,11 @@
 #include "Mesh/BaseMesh.h"
 #include "Mesh/Vertex.h"
 #include "Mesh/HalfEdge.h"
-#include "Mesh/Edge.h"
-#include "Mesh/Face.h"
-#include "mesh/iterators.h"
-#include "mesh/boundary.h"
-#include "Parser/parser.h"
+#include "../Mesh/Edge.h"
+#include "../Mesh/Face.h"
+#include "../Mesh/iterators.h"
+#include "../Mesh/boundary.h"
+#include "../Parser/parser.h"
 
 #ifndef PI
 #define PI 3.14159265358979323846

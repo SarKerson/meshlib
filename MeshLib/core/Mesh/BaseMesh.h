@@ -979,7 +979,7 @@ void CBaseMesh<CVertex,CEdge,CFace,CHalfEdge>::read_obj( const char * filename )
 			{
 				stokenizer.nextToken();
 				token = stokenizer.getToken();
-				p[i] = strutil::parseString<float>(token);
+				p[i] = strutil::parseString<float>(token) / 100.0;
 			}
 			
 			CVertex * v = createVertex( vid);
@@ -1201,7 +1201,6 @@ CEdge * CBaseMesh<CVertex,CEdge,CFace,CHalfEdge>::createEdge( tVertex  v1, tVert
 	m_edges.push_back( e );
 	e->id() = (int)m_edges.size();
 	ledges.push_back( e );
-
 
 	return e;
 

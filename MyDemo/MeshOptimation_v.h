@@ -6,25 +6,6 @@ namespace meshOptimation {
 
     using namespace MeshLib;
 
-    // void insertVertex(CMyMesh& mesh, CPoint p)
-    // {
-    //     CFace* face = LocatePoint(mesh, p);
-    //     if (face != NULL) {
-    //         // printFaceInfo(face);
-    //         CHalfEdge *h0 = face->halfedge(),
-    //                   *h1 = h0->he_next(),
-    //                   *h2 = h0->he_prev();
-    //         faceSplit(mesh, face, p);
-    //         assert(h0->he_next()->vertex() == h1->he_next()->vertex() 
-    //                && h0->he_next()->vertex() ==h2->he_next()->vertex());
-    //         CVertex* v = h0->he_next()->vertex();
-    //         legalizeEdge(mesh, v, h0->edge());
-    //         legalizeEdge(mesh, v, h1->edge());
-    //         legalizeEdge(mesh, v, h2->edge());                //problem!!!!!!!!!!!!
-    //     } else {
-    //         std::cout << p << "---out---\n";
-    //     }
-    // }
     double length_halfedge(CHalfEdge * he)
     {
         CPoint p1 = he->vertex()->point(),
@@ -70,41 +51,49 @@ namespace meshOptimation {
         return CPoint(x, y, 0.0);
     }
 
-    void legalizeFace(CMyMesh& mesh, CFace * theface) 
+    void legalizeFaceByInsert(CMyMesh& mesh, CFace * theface) 
     {
 
-        CPoint p = baryCenter(theface);
-        // std::cout << "barycenter: " << p << "\n";
+        CPoint p = baryCenter(theface);    // calculate circumcircle-center
 
         CFace* face = LocatePoint(mesh, p);
-        if (face != NULL) {
-            std::cout << "insert." << "\n";
+        if (face != NULL) {                 // if face exist, insert the circumcircle-center
+            // std::cout << "insert." << "\n";
             // printFaceInfo(face); 
-            // CHalfEdge *h0 = face->halfedge(),
-            //           *h1 = h0->he_next(),
-            //           *h2 = h0->he_prev();
-            // CPoint p_org_avg =  (h0->vertex()->point() + 
-            //                      h1->vertex()->point() + 
-            //                      h2->vertex()->point()) / 3.0;
-            // CPoint n_avg = (h0->vertex()->normal() + 
-            //                     h1->vertex()->normal() + 
-            //                     h2->vertex()->normal()) / 3.0;
-            // CVertex* _v_ = faceSplit(mesh, face, p, p_org_avg, n_avg);
+            CHalfEdge *h0 = face->halfedge(),
+                      *h1 = h0->he_next(),
+                      *h2 = h0->he_prev();
+            CPoint p_org_avg =  (h0->vertex()->point() + 
+                                 h1->vertex()->point() + 
+                                 h2->vertex()->point()) / 3.0;
+            CPoint n_avg = (h0->vertex()->normal() + 
+                                h1->vertex()->normal() + 
+                                h2->vertex()->normal()) / 3.0;
+            CVertex* _v_ = faceSplit(mesh, face, p, p_org_avg, n_avg);
 
-            // assert(h0->he_next()->vertex() == h1->he_next()->vertex() 
-            //        && h0->he_next()->vertex() == h2->he_next()->vertex());
-            // CVertex* v = h0->he_next()->vertex();
-            // legalizeEdge(mesh, v, h0->edge());
-            // legalizeEdge(mesh, v, h1->edge());
-            // legalizeEdge(mesh, v, h2->edge());                //problem!!!!!!!!!!!!
+            assert(h0->he_next()->vertex() == h1->he_next()->vertex() 
+                   && h0->he_next()->vertex() == h2->he_next()->vertex());
+            CVertex* v = h0->he_next()->vertex();
+            legalizeEdge(mesh, v, h0->edge());
+            legalizeEdge(mesh, v, h1->edge());
+            legalizeEdge(mesh, v, h2->edge());    
         }
-        else {
-            CHalfEdge *h0 = theface->halfedge(),
-                    *h1 = h0->he_next(),
-                    *h2 = h0->he_prev();
-            double l0 = length_halfedge(h0),
-                    l1 = length_halfedge(h1),
-                    l2 = length_halfedge(h2);
+        else {                               // else, split the longest edge
+            // std::cout << "out\n";
+        }
+
+    } 
+
+    void legalizeFaceBySplit(CMyMesh & mesh, CFace * theface, double length_ref)
+    {
+        // std::cout << "begin spliting...\n";
+        CHalfEdge *h0 = theface->halfedge(),
+                *h1 = h0->he_next(),
+                *h2 = h0->he_prev();
+        double l0 = length_halfedge(h0),
+                l1 = length_halfedge(h1),
+                l2 = length_halfedge(h2);
+        if (std::min(l2, std::min(l0, l1)) > length_ref / 2.0) {
             if (l0 > l1 && l0 > l2) {
                 myEdgeSplit(mesh, h0->edge());
             }
@@ -114,45 +103,50 @@ namespace meshOptimation {
             if (l2 > l1 && l2 > l0) {
                 myEdgeSplit(mesh, h2->edge());
             }
-            std::cout << "done split...\n";
         }
-
+        // std::cout << "done split...\n";
     }
 
-    void legailizeMesh(CMyMesh& mesh)
+    void legalizeMesh(CMyMesh& mesh)  
     {
-        
-        generateHarmornicMap(mesh);
-
-        for (int i = 0; i < mesh.faces().size(); ++i)
+        std::list<CMyFace*>::iterator it = (mesh.faces()).begin();
+        CFace * pF = *it;
+        double min_length = ( length_halfedge(pF->halfedge()) + 
+                            length_halfedge(pF->halfedge()->he_prev()) +
+                            length_halfedge(pF->halfedge()->he_next()) ) / 3.0;
+        int i = 0, j = 0;
+        for (; i < mesh.faces().size(); ++i)
         {
             std::cout << "iterations: " << "\t" << i << "\n";
             std::list<CMyFace*>::iterator it = (mesh.faces()).begin(); 
-            std::advance(it, i);
+            std::advance(it, i); 
             CFace * pF = *it;
             if (miniFaceAngle(pF) < 0.6) {    //30
-                legalizeFace(mesh, pF);
+                legalizeFaceByInsert(mesh, pF);
+            }
+            else {
+                // std::cout << "pass." << "\n";  
+            }
+        }
+        for (; j < mesh.faces().size(); ++j)
+        {
+            std::cout << "iterations: " << "\t" << i + j << "\n";
+            std::list<CMyFace*>::iterator it = (mesh.faces()).begin(); 
+            std::advance(it, j); 
+            CFace * pF = *it;
+            if (miniFaceAngle(pF) < 0.6) {    //30
+                legalizeFaceBySplit(mesh, pF, min_length);
             }
             else {
                 // std::cout << "pass." << "\n";
             }
         }
 
-
-
         // for (CMyMesh::MeshVertexIterator viter(&mesh); !viter.end(); ++viter)
         // {
         //     CMyVertex * pV = *viter;
         //     pV->point() = pV->huv();
-        // }        
-        
-        // for (int i = 0; i < mesh.faces().size(); ++i)
-        // {
-        //     CFace * pF = mesh.faces()[i];
-        //     if (miniFaceAngle(pF) < 0.5233) {    //30
-        //         legalizeFace(pF);
-        //     }
-        // }
+        // } 
     }
 
 }

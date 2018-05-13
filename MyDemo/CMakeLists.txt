@@ -17,6 +17,8 @@ find_package( PkgConfig )
 pkg_check_modules( EIGEN3 REQUIRED eigen3 )
 include_directories( ${EIGEN3_INCLUDE_DIRS} )
 
+include_directories( ${PROJECT_BINARY_DIR}../../MeshLib/algriothm/Conformal/HarmonicMapper )
+include_directories( ${PROJECT_BINARY_DIR}../../MeshLib/core )
 add_executable(${PROJECT_NAME} ${PROJECT_BINARY_DIR}/../../MeshLib/core/bmp/RgbImage.cpp main.cpp )
 
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARY} ${FREEGLUT_LIBRARY} ${OPENGL_LIBRARY} ${OpenCV_LIBS} ${Eigen_LIBS})

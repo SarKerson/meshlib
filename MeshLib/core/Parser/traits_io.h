@@ -11,14 +11,14 @@
 #include <map>
 #include <vector>
 
-#include "Mesh/BaseMesh.h"
-#include "Mesh/Vertex.h"
-#include "Mesh/HalfEdge.h"
-#include "Mesh/Edge.h"
-#include "Mesh/Face.h"
-#include "mesh/iterators.h"
-#include "mesh/boundary.h"
-#include "Parser/parser.h"
+#include "../Mesh/BaseMesh.h"
+#include "../Mesh/Vertex.h"
+#include "../Mesh/HalfEdge.h"
+#include "../Mesh/Edge.h"
+#include "../Mesh/Face.h"
+#include "../Mesh/iterators.h"
+#include "../Mesh/boundary.h"
+#include "parser.h"
 
 #define VERTEX_RGB     (0x01<<0)
 #define VERTEX_UV      (0x01<<1)

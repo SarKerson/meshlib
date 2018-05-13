@@ -5,7 +5,7 @@ namespace harmonicMap {
 
     using namespace MeshLib;
     double Energy = 0;
-    double e = 0.2;
+    double e = 0.01;
 
 
 /**
@@ -15,7 +15,7 @@ namespace harmonicMap {
 
     std::map<CMyVertex*, Eigen::Vector3d> f;    //all the result 
 
-    std::map<CMyVertex*, Eigen::Vector3d> org;
+    std::map<CMyVertex*, Eigen::Vector3d> org;	//origin
 
     double k(CMyVertex * v, CMyVertex * w, CMyMesh & mesh)
     {
@@ -155,7 +155,7 @@ namespace harmonicMap {
         for (CMyMesh::MeshVertexIterator viter(&mesh); !viter.end(); ++viter) {
             CMyVertex * v = *viter;
             CPoint p = v->point();
-            f.insert(std::make_pair(v, Eigen::Vector3d(p[0], p[1], p[2])));
+            f.insert(std::make_pair(v, Eigen::Vector3d(0, 0, 0)));
             org.insert(std::make_pair(v, Eigen::Vector3d(p[0], p[1], p[2])));
         }
 
@@ -197,7 +197,7 @@ namespace harmonicMap {
 
 
 
-    void diskMap(CMyMesh & mesh)
+    void diskMap(CMyMesh & mesh)							/*--ALGORITHM:2--*/
     {
         set_boundary(mesh);
         int num_boundary = num_of_boundary(mesh);
@@ -210,11 +210,11 @@ namespace harmonicMap {
         assert(num_boundary == g.size());        //all the functions of boundary vertex
 
 
-        double E = harmonicEnergy(mesh);
+        double E = harmonicEnergy(mesh);		//init E    /*--##FORMULA:3--*/
 
         do {
 
-            Energy = E;
+            Energy = E;										/*--##FORMULA:5--*/
             for (std::map<CMyVertex*, Eigen::Vector3d>::iterator it = f.begin(); it != f.end(); ++ it) {
                 CMyVertex * v = it->first;
                 Eigen::Vector3d p = it->second;
@@ -224,11 +224,11 @@ namespace harmonicMap {
                     for (CMyMesh::VertexVertexIterator vviter(v); !vviter.end(); ++vviter) {
                         CMyVertex * w = *vviter;
                         double k_v_w = k(v, w, mesh); 
-                        sum_p_0 += k_v_w * f[w][0];
-                        sum_p_1 += k_v_w * f[w][1];
+                        sum_p_0 += k_v_w * f[w][0];  // x
+                        sum_p_1 += k_v_w * f[w][1];	 // y
                         sum_k += k_v_w;
                     }
-                    Eigen::Vector3d v_t(sum_p_0 / sum_k, sum_p_1 / sum_k, 0.0);
+                    Eigen::Vector3d v_t(sum_p_0 / sum_k, sum_p_1 / sum_k, 0.0);	/*--##FORMULA:7--*/
                     f[v] = v_t;
                     v->point() = CPoint(v_t[0], v_t[1], v_t[2]);
                 }

@@ -12,7 +12,7 @@ protected:
     /*! fix the boundary vertices to the unit circle
      *  using arc length parameter
      */
-    void _set_boundary() 
+    void _set_boundary()  
     {
         //get the boundary half edge loop
         std::vector<CMyMesh::CLoop*> & pLs =  m_boundary.loops();
@@ -142,13 +142,11 @@ public:
 
 
         Eigen::ConjugateGradient<Eigen::SparseMatrix<double>> solver;
-        std::cerr << "Eigen Decomposition" << std::endl;
         solver.compute(A);
-        std::cerr << "Eigen Decomposition Finished" << std::endl;
         
         if( solver.info() != Eigen::Success )
         {
-            std::cerr << "Waring: Eigen decomposition failed" << std::endl;
+            std::cerr << "failed" << std::endl;
         }
 
 
@@ -170,7 +168,7 @@ public:
             Eigen::VectorXd x = solver.solve(c);
             if( solver.info() != Eigen::Success )
             {
-                std::cerr << "Waring: Eigen decomposition failed" << std::endl;
+                std::cerr << "failed" << std::endl;
             }
 
             //set the images of the harmonic map to interior vertices
@@ -248,6 +246,5 @@ public:
 void generateHarmornicMap(CMyMesh & mesh)
 {
     harmornicMap mapper(&mesh);
-    // mapper._map();
-    mapper._iterative_map();
+    mapper._map();
 }
