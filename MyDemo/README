@@ -1,3 +1,7 @@
+# MyDemo
 1.切换到build目录下，使用命令：           cmake ..
 2.在build目录下，使用命令：               make
 3.运行程序(这里运行数据文件为face.m)      ./MyDemo ../../Data/face.m 
+
+## Laplace Solution
+![laplace]
